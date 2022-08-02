@@ -1,16 +1,7 @@
-import sbt.Keys._
+addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.4.1")
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.0")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.10.1")
 
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.6.0")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
-
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
-
-addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.2")
-
-Option(System.getProperty("scoverage")).getOrElse("false") match {
-  case "true" => addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.3")
-  case _ => libraryDependencies ++= Seq()
-}
+addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.10")
