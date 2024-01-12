@@ -1,5 +1,19 @@
 Global / crossScalaVersions := Seq("2.12.16", "2.13.8")
 Global / scalaVersion := crossScalaVersions.value.last
+Global / credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+Global / organization := "uk.gov.homeoffice"
+Global / versionScheme := Some(VersionScheme.EarlySemVer)
+Global / version := "5.0.0"
+
+Global / resolvers ++= Seq(
+      "Artifactory Snapshot Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-snapshot-local/",
+      "Artifactory Release Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/libs-release-local/",
+      "Artifactory External Release Local Realm" at "https://artifactory.digital.homeoffice.gov.uk/artifactory/ext-release-local/"
+    )
+Global / publishTo := {
+      val artifactory = sys.env.get("ARTIFACTORY_SERVER").getOrElse("https://artifactory.digital.homeoffice.gov.uk/")
+      Some("release"  at artifactory + "artifactory/libs-release-local")
+    }
 
 lazy val commons = project
   .in(file("casbah-commons"))
@@ -31,20 +45,13 @@ lazy val examples = project
 // format: off
 inThisBuild(
   List(
-    sonatypeCredentialHost := Sonatype.sonatype01,
-    versionScheme := Some(VersionScheme.EarlySemVer),
-    organization := "io.kinoplan",
-    homepage := Some(url("https://github.com/kinoplan/utils")),
-    licenses := Seq("Apache-2.0" -> url("https://opensource.org/licenses/Apache-2.0")),
-    developers := List(Developer("kinoplan", "Kinoplan", "job@kinoplan.ru", url("https://kinoplan.tech"))),
-    scmInfo := Some(
-      ScmInfo(
-        url("https://github.com/kinoplan/utils"),
-        "scm:git:git@github.com:kinoplan/utils.git"
-      )
-    )
   )
 )
+
+
+publishArtifact in (Test, packageBin) := true
+publishArtifact in (Test, packageDoc) := true
+publishArtifact in (Test, packageSrc) := true
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 // format: on

@@ -131,7 +131,7 @@ object MongoDBList {
   def concat[A](xss: scala.Traversable[A]*): MongoDBList = {
     val b = newBuilder[A]
     if (xss forall (_.isInstanceOf[IndexedSeq[_]])) b.sizeHint(xss.map(_.size).sum)
-    for { xs <- xss } b ++= xs
+    for { xs <- xss } b += xs
     b.result()
   }
 
@@ -139,17 +139,19 @@ object MongoDBList {
 
 }
 
-sealed class MongoDBListBuilder extends scala.collection.mutable.Builder[Any, Seq[Any]] {
+sealed class MongoDBListBuilder /* extends scala.collection.mutable.Builder[Any, Seq[Any]] */ {
 
   protected val empty: MongoDBList = new MongoDBList
 
   protected var elems: MongoDBList = empty
 
   // scalastyle:off method.name public.methods.have.type
-  override def +=(x: Any) = {
+  def +=(x: Any) = {
     elems.add(x.asInstanceOf[AnyRef])
     this
   }
+
+  def sizeHint(c :Int) :Unit = ???
 
   // scalastyle:on method.name public.methods.have.type
 

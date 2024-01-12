@@ -35,7 +35,12 @@ import com.mongodb.casbah.TypeImports.{ DBEncoder, WriteResult }
 import com.mongodb.casbah.commons.Logging
 import com.mongodb.casbah.commons.TypeImports.DBObject
 import com.mongodb.casbah.map_reduce.{ MapReduceCommand, MapReduceResult }
-import com.mongodb.{ ParallelScanOptions => JavaParallelScanOptions, _ }
+import com.mongodb.{
+  ParallelScanOptions => JavaParallelScanOptions,
+  BulkWriteOperation => JBulkWriteOperation,
+  AggregationOutput => JAggregationOutput,
+  _
+}
 
 /**
  * Scala wrapper for Mongo DBCollections,
@@ -707,7 +712,7 @@ trait MongoCollectionBase extends Logging {
    *
    */
   def aggregate[A <% DBObject](pipeline: Iterable[A], options: AggregationOptions, readPreference: ReadPreference): Cursor =
-    underlying.aggregate(pipeline.map(_.asInstanceOf[DBObject]).toList.asJava, options, readPreference).asScala
+    underlying.aggregate(pipeline.map(_.asInstanceOf[DBObject]).toList.asJava, options, readPreference).asScala.underlying
 
   /**
    * Return the explain plan for the aggregation pipeline.
@@ -735,7 +740,7 @@ trait MongoCollectionBase extends Logging {
     builder.batchSize(options.batchSize)
     builder.readPreference(options.readPreference.getOrElse(getReadPreference))
 
-    underlying.parallelScan(builder.build()).asScala.map(_.asScala)
+    underlying.parallelScan(builder.build()).asScala.map(_.asScala.underlying)
   }
 
   /**

@@ -68,7 +68,7 @@ class MongoURI(val underlying: com.mongodb.MongoURI) {
 
   def password: Option[Array[Char]] = Option(underlying.getPassword)
 
-  def hosts: Seq[String] = underlying.getHosts.asScala
+  def hosts: Seq[String] = underlying.getHosts.asScala.toSeq
 
   def database: Option[String] = Option(underlying.getDatabase)
 

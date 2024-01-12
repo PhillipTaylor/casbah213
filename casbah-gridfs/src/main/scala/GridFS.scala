@@ -23,7 +23,7 @@ package com.mongodb.casbah
 package gridfs
 
 import java.io.{ File, InputStream }
-import scala.beans.BeanInfo
+//import scala.beans.BeanInfo
 
 import com.mongodb.gridfs.{
   GridFS => MongoGridFS,
@@ -66,7 +66,7 @@ class GridFS protected[gridfs] (override val underlying: MongoGridFS) extends Ge
 
     def count(): Int = fileSet.count
 
-    override def length: Int = fileSet.length
+    //def length: Int = fileSet.length
 
     def numSeen(): Int = fileSet.numSeen
 
@@ -227,13 +227,13 @@ class GridFS protected[gridfs] (override val underlying: MongoGridFS) extends Ge
 
 }
 
-@BeanInfo
+//@BeanInfo
 class GridFSFile(_underlying: MongoGridFSFile) extends GenericGridFSFile(_underlying) with ConvertToDate
 
-@BeanInfo
+//@BeanInfo
 class GridFSDBFile(_underlying: MongoGridFSDBFile) extends GenericGridFSDBFile(_underlying) with ConvertToDate
 
-@BeanInfo
+//@BeanInfo
 class GridFSInputFile(_underlying: MongoGridFSInputFile) extends GenericGridFSInputFile(_underlying) with ConvertToDate
 
 trait ConvertToDate {

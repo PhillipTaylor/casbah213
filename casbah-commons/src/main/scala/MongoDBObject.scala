@@ -25,10 +25,10 @@ package commons
 
 import com.mongodb.casbah.commons.Imports._
 
-import scala.beans.BeanInfo
-import scala.collection.JavaConversions._
+//import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 import scala.collection.generic._
-import scala.collection.mutable
+import scala.collection._
 import scala.util.{ Success, Try }
 import java.util
 
@@ -41,13 +41,13 @@ import java.util
  * @since 1.0
  *
  */
-@BeanInfo
-class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutable.Map[String, AnyRef]
-    with mutable.MapLike[String, AnyRef, MongoDBObject] with Logging with Castable {
+//BeanInfo macro no longer supported in Scala 2.12
+class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends /* mutable.Map[String, AnyRef]
+    with mutable.MapOps[String, AnyRef, Map, MongoDBObject] with */  Logging with Castable {
 
-  override def empty: MongoDBObject = MongoDBObject.empty
+  def empty: MongoDBObject = MongoDBObject.empty
 
-  def iterator: Iterator[(String, Object)] = underlying.toMap.iterator.asInstanceOf[Iterator[(String, Object)]]
+  def iterator: Iterator[(String, Object)] = underlying.toMap.asScala.toIterator.asInstanceOf[Iterator[(String, Object)]]
 
   /**
    * as
@@ -68,7 +68,7 @@ class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutabl
     expand[A](key) match {
       case Some(value)                           => value
       case None if underlying.containsField(key) => underlying.get(key).asInstanceOf[A]
-      case _                                     => default(key).asInstanceOf[A]
+      case _                                     => throw new Exception("Not implemented") //default(key).asInstanceOf[A]
     }
   }
 
@@ -91,7 +91,7 @@ class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutabl
     }
   }
 
-  override def get(key: String): Option[AnyRef] =
+  def get(key: String): Option[AnyRef] =
     /* underlying.get returns null both when the value is missing and when
      * it is null. Unlike nulls, Options can be nested, so we can allow clients
      * to see the difference. */
@@ -104,9 +104,10 @@ class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutabl
     this ++ b.result
   }
 
-  def ++[A <% DBObject](other: A): DBObject = {
-    super.++(other: DBObject)
-  }
+  //def ++[A <% DBObject](other: A): DBObject = {
+  //  //super.++(other: DBObject)
+  //  throw new Exception("Not implemented")
+  //}
 
   /**
    * Returns a new list with this MongoDBObject at the *end*
@@ -204,7 +205,7 @@ class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutabl
 
   def partialObject: Boolean = isPartialObject
 
-  override def put(k: String, v: AnyRef): Option[AnyRef] = {
+  def put(k: String, v: AnyRef): Option[AnyRef] = {
     // scalastyle:off null
     val cvt = MongoDBObject.convertValue(v)
     cvt match {
@@ -238,6 +239,13 @@ class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutabl
 
   def toMap: util.Map[_, _] = underlying.toMap
 
+  def toSMap: Map[String, AnyRef] = underlying.toMap.asScala.asInstanceOf[Map[String, AnyRef]]
+
+  def ++(o :DBObject) :DBObject =
+    (toSMap ++ o.toSMap).asDBObject
+  
+  def map[B](f :(Tuple2[String, AnyRef] => B)) :Iterable[B] = toMap.asScala.asInstanceOf[Map[String, AnyRef]].map(f)
+
   def asDBObject: DBObject = underlying
 
   // scalastyle:off method.name
@@ -251,13 +259,6 @@ class MongoDBObject(val underlying: DBObject = new BasicDBObject) extends mutabl
 }
 
 object MongoDBObject {
-
-  implicit val canBuildFrom: CanBuildFrom[Map[String, Any], (String, Any), DBObject] =
-    new CanBuildFrom[Map[String, Any], (String, Any), DBObject] {
-      def apply(from: Map[String, Any]): mutable.Builder[(String, Any), DBObject] = apply()
-
-      def apply(): mutable.Builder[(String, Any), DBObject] = newBuilder[String, Any]
-    }
 
   def empty: DBObject = new MongoDBObject()
 
@@ -285,12 +286,17 @@ sealed class MongoDBObjectBuilder extends mutable.Builder[(String, Any), DBObjec
   protected var elems = empty
 
   // scalastyle:off method.name
-  override def +=(x: (String, Any)): this.type = {
-    val cvt = MongoDBObject.convertValue(x._2)
-    cvt match {
-      case _v: Option[_] => elems.add(x._1, _v.orNull)
-      case _             => elems.add(x._1, cvt)
-    }
+  //override def +=(x: (String, Any)): this.type = {
+  //  val cvt = MongoDBObject.convertValue(x._2)
+  //  cvt match {
+  //    case _v: Option[_] => elems.add(x._1, _v.orNull)
+  //    case _             => elems.add(x._1, cvt)
+  //  }
+  //  this
+  //}
+
+  def addOne(elem: (String, Any)) = {
+    elems.add(elem._1, elem._2)
     this
   }
 

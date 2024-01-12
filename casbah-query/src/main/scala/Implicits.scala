@@ -163,9 +163,9 @@ object ValidTypes {
 
   trait LongOk extends ValidNumericType[Long] with Numeric.LongIsIntegral with Ordering.LongOrdering
 
-  trait FloatOk extends ValidNumericType[Float] with Numeric.FloatIsFractional with Ordering.FloatOrdering
+  trait FloatOk extends ValidNumericType[Float] with Numeric.FloatIsFractional with Ordering.Float.IeeeOrdering
 
-  trait DoubleOk extends ValidNumericType[Double] with Numeric.DoubleIsFractional with Ordering.DoubleOrdering
+  trait DoubleOk extends ValidNumericType[Double] with Numeric.DoubleIsFractional with Ordering.Double.IeeeOrdering
 
 }
 

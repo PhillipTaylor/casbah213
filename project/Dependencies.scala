@@ -33,5 +33,7 @@ object Dependencies {
   val specs2Core = "org.specs2" %% "specs2-core" % specs2V % Test
   val specs2Junit = "org.specs2" %% "specs2-junit" % specs2V % Test
   val specs2Mock = "org.specs2" %% s"specs2-mock" % specs2V % Test
+  val collectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.11.0"
+
 
 }

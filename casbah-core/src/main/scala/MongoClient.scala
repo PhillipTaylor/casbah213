@@ -198,14 +198,14 @@ object MongoClient {
    *
    * @param  uri (MongoClientURI)
    */
-  def apply(uri: MongoClientURI): MongoClient = new MongoClient(new JavaMongoClient(uri.underlying))
+  def apply(uri: MongoClientURI): MongoClient = new MongoClient(new JavaMongoClient(uri))
 
   /**
    * Connect via a com.mongodb.MongoClientURI
    *
    * @param  uri (com.mongodb.MongoClientURI)
    */
-  def apply(uri: com.mongodb.MongoClientURI): MongoClient = new MongoClient(new JavaMongoClient(uri))
+  //def apply(uri: com.mongodb.MongoClientURI): MongoClient = new MongoClient(new JavaMongoClient(uri))
 
 }
 

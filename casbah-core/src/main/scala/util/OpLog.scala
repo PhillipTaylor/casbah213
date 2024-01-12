@@ -100,7 +100,7 @@ class MongoOpLog(
 
 object MongoOpLogEntry {
   // scalastyle:off public.methods.have.type
-  def apply(entry: MongoDBObject) = entry("op") match {
+  def apply(entry: MongoDBObject) = entry.toMap.get("op") match {
     case InsertOp.typeCode =>
       MongoInsertOperation(
         entry.as[BSONTimestamp]("ts"),

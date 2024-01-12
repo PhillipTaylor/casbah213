@@ -14,7 +14,8 @@ object Modules {
         Dependencies.specs2Junit,
         Dependencies.specs2Mock,
         Dependencies.slf4j,
-        Dependencies.slf4jJCL
+        Dependencies.slf4jJCL,
+        Dependencies.collectionCompat
       )
     )
     .settings(Test / packageBin / publishArtifact := true)

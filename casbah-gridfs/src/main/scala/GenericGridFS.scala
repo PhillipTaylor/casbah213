@@ -22,7 +22,7 @@
 package com.mongodb.casbah
 package gridfs
 
-import scala.beans.BeanInfo
+//import scala.beans.BeanInfo
 import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
 
@@ -86,7 +86,7 @@ abstract class GenericGridFS protected[gridfs] extends Logging {
 
 }
 
-@BeanInfo
+//@BeanInfo
 abstract class GenericGridFSFile(override val underlying: MongoGridFSFile) extends MongoDBObject with Logging {
   type DateType
 
@@ -152,7 +152,7 @@ class GridFSDBFileSafeJoda extends MongoGridFSDBFile {
   }
 }
 
-@BeanInfo
+//@BeanInfo
 abstract class GenericGridFSDBFile protected[gridfs] (override val underlying: MongoGridFSDBFile) extends GenericGridFSFile(underlying) {
 
   def inputStream: InputStream = underlying.getInputStream
@@ -178,7 +178,7 @@ abstract class GenericGridFSDBFile protected[gridfs] (override val underlying: M
   }
 }
 
-@BeanInfo
+//@BeanInfo
 abstract class GenericGridFSInputFile protected[gridfs] (override val underlying: MongoGridFSInputFile) extends GenericGridFSFile(underlying) {
   def filename_=(name: String): Unit = underlying.setFilename(name)
 

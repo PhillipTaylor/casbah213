@@ -59,13 +59,16 @@ object MongoClientURI {
  * @since 2.5
  */
 case class MongoClientURI(underlying: com.mongodb.MongoClientURI) {
+
+  def raw: com.mongodb.MongoClientURI = underlying
+
   def username: Option[String] = Option(underlying.getUsername)
 
   def password: Option[Array[Char]] = Option(underlying.getPassword)
 
   def credentials: Option[JavaMongoCredential] = Option(underlying.getCredentials)
 
-  def hosts: Seq[String] = underlying.getHosts.asScala
+  def hosts: Seq[String] = underlying.getHosts.asScala.toSeq
 
   def database: Option[String] = Option(underlying.getDatabase)
 
